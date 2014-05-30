@@ -19,6 +19,13 @@ class OceanOpticsSpectrometer(object):
         if self._serial == None:
             raise RuntimeError('Could not open serial connection')
 
+        print('NanoControl initialized')
+        self._serial.write('version')
+        print('Firmware Version: ' + self._serial.readline())
+        self._serial.write('builddate')
+        print('Build Date: ' + self._serial.readline())
+
+
     def _read_return_status(self):
         buf = self._serial.readline()
         print (buf)

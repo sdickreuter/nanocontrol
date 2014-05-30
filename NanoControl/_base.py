@@ -5,7 +5,7 @@ import time
 import sys
 import _defines as d
 
-class OceanOpticsSpectrometer(object):
+class NanoControl(object):
     _x = 0
     _y = 0
 

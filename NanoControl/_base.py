@@ -12,9 +12,9 @@ class NanoControl(object):
     def __init__(self, port=None):
         try:
             if port is None:
-                self._serial = serial.Serial(d.DEFAULT_SERIAL, d.DEFAULT_BAUDRATE, timeout=1)
+                self._serial = serial.Serial(d.DEFAULT_SERIAL, d.DEFAULT_BAUDRATE, timeout=0.1)
             else:
-                self._serial = serial.Serial(port, d.DEFAULT_BAUDRATE, timeout=1)
+                self._serial = serial.Serial(port, d.DEFAULT_BAUDRATE, timeout=0.1)
         except:
             self._serial.close()
             raise RuntimeError('Could not open serial connection')
@@ -27,32 +27,43 @@ class NanoControl(object):
         print('Firmware Version: ' + self._read_return_status())
         self._x, self._y = self._counterread()
 
-
     def _read_return_status(self):
         buf = self._serial.readline()
         buf = buf.split("\t")
         if buf[0] == 'e':
            raise RuntimeError('Return Status reported an error')
-
         return buf[1]
 
     def _coarse(self, channel, steps):
-        pass
+        if channel in ('A','B'):
+            if (steps >= -65536) & (steps <= 65535):
+                self._serial.write('coarse '+channel+' '+str(steps)+'\r')
+                return self._read_return_status()
+        raise RuntimeError('illegal parameters in _coarse(channel, steps)')
 
     def _get_coarse_counter(self, channel):
-        pass
+        self._serial.write('coarse ?\r')
+        return self._read_return_status()
 
-    def _coarse_reset(self, channel):
-        pass
+    def _coarse_reset(self):
+        self._serial.write('coarsereset\r')
+        return self._read_return_status()
+
 
     def _fine(self, channel, steps):
-        pass
+        if channel in ('A','B'):
+            if (steps >= -2048) & (steps <= 2047):
+                self._serial.write('fine '+channel+' '+str(steps)+'\r')
+                return self._read_return_status()
+        raise RuntimeError('illegal parameters in _fine(channel, steps)')
 
     def _get_fine_counter(self):
-        pass
+        self._serial.write('fine ?\r')
+        return self._read_return_status()
 
-    def _fine_reset(self, channel):
-        pass
+    def _relax(self):
+        self._serial.write('relax\r')
+        return self._read_return_status()
 
     def _moveabs(self, x=None, y=None, channel=None, pos=None):
         if (x is not None) & (y is not None):

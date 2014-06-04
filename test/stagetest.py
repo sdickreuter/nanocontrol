@@ -9,10 +9,10 @@ nc = nano.NanoControl()
 
 #nc.home()
 
-A = 5000 # amplitude in nm
-T = 10 # cycle duration in s
-n = 100  # number of steps per cycle
-duration = 10000 # duration in ms
+A = 2047 # amplitude in nm
+T = 2 # cycle duration in s
+n = 200  # number of steps per cycle
+duration = 10 # duration in s
 
 def millis():
     dt = datetime.now() - starttime
@@ -22,7 +22,9 @@ def millis():
 t = 0
 starttime = datetime.now()
 while (t < duration):
-        t = millis()
-        #print( int(A*math.sin(2*math.pi/T*t)))
-        print(nc._moverel(0,int(A*math.sin(2*math.pi/T*t))))
-        #time.sleep(T/n)
+        t = millis()/1000
+        sin_value = math.sin(2*math.pi/float(T)*t)
+        print "Val: {0:6} | t: {1:.3f}".format(int(A*sin_value),t) + '  ' + '#'.rjust(int(10*sin_value+10))
+        #nc._fine('A',A*sin_value)
+        #print(nc._moverel(0,int(A*math.sin(2*math.pi/T*t))))
+        time.sleep(float(T)/n)

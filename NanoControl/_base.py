@@ -32,7 +32,11 @@ class NanoControl(object):
         buf = buf.split("\t")
         if buf[0] == 'e':
            raise RuntimeError('Return Status reported an error')
-        return buf[1]
+           return buf
+        if len(buf) > 1:
+            return buf[1]
+        else:
+            return buf[0]
 
     def _coarse(self, channel, steps):
         if channel in ('A','B'):
@@ -53,7 +57,7 @@ class NanoControl(object):
     def _fine(self, channel, steps):
         if channel in ('A','B'):
             if (steps >= -2048) & (steps <= 2047):
-                self._serial.write('fine '+channel+' '+str(steps)+'\r')
+                self._serial.write('fine '+channel+' '+str(int(steps))+'\r')
                 return self._read_return_status()
         raise RuntimeError('illegal parameters in _fine(channel, steps)')
 

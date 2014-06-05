@@ -58,14 +58,33 @@ class NanoControl(object):
         raise RuntimeError('illegal parameters in _fine(channel, steps)')
 
     def _get_fine_counter(self):
+        """
+
+
+        :return:
+        """
         self._serial.write('fine ?\r')
         return self._read_return_status()
 
     def _relax(self):
+        """
+        relax all channels (no voltage on the piezos)
+
+        :return: return status
+        """
         self._serial.write('relax\r')
         return self._read_return_status()
 
     def _moveabs(self, x=None, y=None, channel=None, pos=None):
+        """
+        move stage to absolute coordinates (only when stage has encoders !)
+
+        :param x: move x-axis to the x position in nanometers
+        :param y: move y-axis to the y position in nanometers
+        :param channel: if you only want to move one channel/axis, define channel here (A=x,B=y)
+        :param pos: position in nm the channel is moved to
+        :return: return status
+        """
         if (x is not None) & (y is not None):
             self._serial.write('moveabs '+str(x)+' '+str(y)+'\r')
         elif (channel in ('A','B')) & (pos is not None):
@@ -73,6 +92,13 @@ class NanoControl(object):
         return self._read_return_status
 
     def _moverel(self, dx=None, dy=None):
+        """
+        move the stage by dx and dy [nm]
+
+        :param dx: move x-axis by dx nanometers
+        :param dy: move y-axis by dy nanometers
+        :return: return status, values of the counters
+        """
         x, y = self._counterread()
         self._moveabs(x=x+dx,y=y+dy)
         return self._read_return_status()
@@ -97,8 +123,15 @@ class NanoControl(object):
 
 
     def home(self):
+        """
+        homes both axes of the stage
+
+        :return: returns counter values after homing
+        """
         self._moveabs(x=-200000,y=-200000)
         self._counterreset()
         self._moveabs(x=1000,y=1000)
         time.sleep(0.2)
-        print(self._counterreset())
+        self._relax()
+        time.sleep(0.2)
+        return self._counterreset()

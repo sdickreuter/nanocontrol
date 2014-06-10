@@ -139,3 +139,49 @@ class NanoControl(object):
         self._relax()
         time.sleep(0.2)
         return self._counterreset()
+
+
+class NanoControl_Dummy(object):
+    _x = 0
+    _y = 0
+
+    def __init__(self, port=None):
+        pass
+
+    def _read_return_status(self):
+        return 'o\r'
+
+
+    def _coarse(self, channel, steps):
+        return 0
+
+    def _get_coarse_counter(self, channel):
+        return 0
+
+    def _coarse_reset(self):
+        return 0
+
+    def _fine(self, channel, steps):
+        return 0
+
+    def _get_fine_counter(self):
+        return 0
+
+    def _relax(self):
+        return 0
+
+    def _moveabs(self, x=None, y=None, channel=None, pos=None):
+        return 0
+
+    def _moverel(self, dx=None, dy=None):
+        return 0
+
+    def _counterread(self):
+        return (0,0)
+
+    def _counterreset(self):
+        return 0
+
+    def home(self):
+        return 0
+

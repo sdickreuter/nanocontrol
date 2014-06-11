@@ -149,39 +149,50 @@ class NanoControl_Dummy(object):
         pass
 
     def _read_return_status(self):
+        time.sleep(0.1)
         return 'o\r'
 
-
     def _coarse(self, channel, steps):
+        time.sleep(0.1)
         return 0
 
     def _get_coarse_counter(self, channel):
+        time.sleep(0.1)
         return 0
 
     def _coarse_reset(self):
+        time.sleep(0.1)
         return 0
 
     def _fine(self, channel, steps):
+        time.sleep(0.1)
         return 0
 
     def _get_fine_counter(self):
+        time.sleep(0.1)
         return 0
 
     def _relax(self):
+        time.sleep(0.1)
         return 0
 
     def _moveabs(self, x=None, y=None, channel=None, pos=None):
+        time.sleep(0.1)
         return 0
 
     def _moverel(self, dx=None, dy=None):
+        time.sleep(0.1)
         return 0
 
     def _counterread(self):
+        time.sleep(0.1)
         return (0,0)
 
     def _counterreset(self):
+        time.sleep(0.1)
         return 0
 
     def home(self):
+        time.sleep(0.1)
         return 0
 
